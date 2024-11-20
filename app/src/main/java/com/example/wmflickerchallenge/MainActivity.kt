@@ -1,47 +1,42 @@
 package com.example.wmflickerchallenge
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.wmflickerchallenge.ui.theme.WMFlickerChallengeTheme
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.lifecycle.ViewModelProvider
+import com.example.wmflickerchallenge.intent.FlickerIntent
+import com.example.wmflickerchallenge.model.network.FlickerApiClient
+import com.example.wmflickerchallenge.model.repo.FlickerRepository
+import com.example.wmflickerchallenge.state.FlickerState
+import com.example.wmflickerchallenge.view.FlickerPhotoScreen
+import com.example.wmflickerchallenge.viewmodel.FlickerViewModel
+import com.example.wmflickerchallenge.viewmodel.ViewModelFactory
 
 class MainActivity : ComponentActivity() {
+
+    private lateinit var viewModel: FlickerViewModel
+
+    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        val repository = FlickerRepository(FlickerApiClient.flickerApiService)
+
+        val factory = ViewModelFactory { FlickerViewModel(repository) }
+
+        viewModel = ViewModelProvider(this, factory)[FlickerViewModel::class.java]
+
         setContent {
-            WMFlickerChallengeTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
-            }
+
+            FlickerPhotoScreen(
+                viewModel
+            )
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    WMFlickerChallengeTheme {
-        Greeting("Android")
     }
 }

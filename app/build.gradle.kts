@@ -8,7 +8,7 @@ plugins {
 
 android {
     namespace = "com.example.wmflickerchallenge"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.wmflickerchallenge"
@@ -63,6 +63,11 @@ dependencies {
     implementation(libs.gson)
     implementation(libs.converter.gson)
 
+    implementation(libs.lifecycle.viewmodel.savedstate)
+    implementation(libs.lifecycle.runtime.compose)
+    implementation(libs.lifecycle.viewmodel.compose)
+
+//    implementation("androidx.compose.runtime:runtime-livedata:1.4.0")
 
     implementation ("com.squareup.retrofit2:retrofit:2.11.0")
     implementation ("com.squareup.okhttp3:okhttp:4.9.0")
