@@ -44,11 +44,6 @@ class FlickerViewModel (private val repository: FlickerRepository): ViewModel() 
         }
     }
 
-    fun updateSearch(tag: String) {
-
-    }
-
-
     private fun fetchPhotosByTag(tag: String) {
         viewModelScope.launch {
             try {

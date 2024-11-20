@@ -8,7 +8,7 @@ interface FlickerApiService {
 
     // https://api.flickr.com/services/feeds/photos_public.gne?format=json&nojsoncallback=1&tags=porcupine
 
-    @GET("services/feeds/photos_public.gne")
+    @GET("services/feeds/photos_public.gne?format=json&nojsoncallback=1")
     suspend fun getPhotos(
         @Query("tags") tags: String
     ): FlickerResponse

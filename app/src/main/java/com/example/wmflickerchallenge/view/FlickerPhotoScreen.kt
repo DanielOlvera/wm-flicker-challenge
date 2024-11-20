@@ -1,10 +1,13 @@
 package com.example.wmflickerchallenge.view
 
+import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -20,13 +23,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.BlendMode.Companion.Screen
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import coil3.compose.AsyncImage
+import coil3.compose.rememberAsyncImagePainter
+import coil3.request.ImageRequest
 import com.example.wmflickerchallenge.intent.FlickerIntent
-import com.example.wmflickerchallenge.navigation.ScreenNavigation
 import com.example.wmflickerchallenge.state.FlickerState
 import com.example.wmflickerchallenge.viewmodel.FlickerViewModel
 
@@ -34,9 +36,9 @@ import com.example.wmflickerchallenge.viewmodel.FlickerViewModel
 @Composable
 fun FlickerPhotoScreen(
     viewModel: FlickerViewModel,
-    navController: NavController = rememberNavController()) {
-
-    val photoState by viewModel.photoState.observeAsState(FlickerState.Loading)
+    navController: NavController
+) {
+    val photoState by viewModel.photoState.observeAsState()
     val searchQuery by viewModel.searchQuery.collectAsState()
 
     var query by remember { mutableStateOf("") }
@@ -51,7 +53,6 @@ fun FlickerPhotoScreen(
                 viewModel.handleIntent(FlickerIntent.FetchFlickerData(newQuery))
             },
             onSearch = {
-                // Handle any additional action when the search is submitted
                 isActive = false
             },
             active = isActive,
@@ -66,24 +67,35 @@ fun FlickerPhotoScreen(
                 val photos = (photoState as FlickerState.Success).response
                 LazyVerticalGrid(columns = GridCells.Fixed(2)) {
                     items(photos.items) { photo ->
+                        Log.d("Dang", "FlickerPhotoScreen: $photo")
                         Box(modifier = Modifier.padding(8.dp)) {
-                            AsyncImage(
-                                model = photo.link,
-                                contentDescription = photo.title,
+                            // Use of Coil to load the image
+                            Image(
+                                painter = rememberAsyncImagePainter(
+                                    ImageRequest.Builder(LocalContext.current)
+                                        .data(photo.media?.m)
+                                        .build()
+                                ),
+                                contentDescription = null,
                                 modifier = Modifier
-                                    .fillMaxWidth()
+                                    .size(128.dp)
                                     .clickable {
                                         navController.navigate(
-                                            ScreenNavigation.DetailScreen.createRoute(
-                                                title = photo.title,
-                                                description = photo.description,
-                                                author = photo.author,
-                                                published = photo.published,
-                                                imageUrl = photo.link
-                                            )
+                                            "photo_detail_screen/${photo.title}/${photo.description}/${photo.author}/${photo.published}/${photo.media?.m}"
                                         )
                                     }
                             )
+//                            AsyncImage(
+//                                model = photo.media, // Image URL
+//                                contentDescription = photo.title,
+//                                modifier = Modifier
+//                                    .fillMaxWidth()
+//                                    .clickable {
+//                                        navController.navigate(
+//                                            "photo_detail_screen/${photo.title}/${photo.description}/${photo.author}/${photo.published}/${photo.link}"
+//                                        )
+//                                    }
+//                            )
                         }
                     }
                 }
@@ -93,6 +105,9 @@ fun FlickerPhotoScreen(
             }
             FlickerState.Loading -> {
                 CircularProgressIndicator()
+            }
+            else -> {
+                Text("Unknown State, how it landed here?")
             }
         }
     }
