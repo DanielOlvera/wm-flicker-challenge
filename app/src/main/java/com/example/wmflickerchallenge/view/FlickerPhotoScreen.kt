@@ -85,17 +85,6 @@ fun FlickerPhotoScreen(
                                         )
                                     }
                             )
-//                            AsyncImage(
-//                                model = photo.media, // Image URL
-//                                contentDescription = photo.title,
-//                                modifier = Modifier
-//                                    .fillMaxWidth()
-//                                    .clickable {
-//                                        navController.navigate(
-//                                            "photo_detail_screen/${photo.title}/${photo.description}/${photo.author}/${photo.published}/${photo.link}"
-//                                        )
-//                                    }
-//                            )
                         }
                     }
                 }
