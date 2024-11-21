@@ -37,27 +37,9 @@ fun NavGraphBuilder.searchScreen(
 
 fun NavGraphBuilder.photoDetailScreen() {
     composable(
-        route = "photo_detail_screen/{title}/{description}/{author}/{published}/{imageUrl}",
-        arguments = listOf(
-            navArgument("title") { type = NavType.StringType },
-            navArgument("description") { type = NavType.StringType },
-            navArgument("author") { type = NavType.StringType },
-            navArgument("published") { type = NavType.StringType },
-            navArgument("imageUrl") { type = NavType.StringType }
-        )
-    ) { backStackEntry ->
-        val title = backStackEntry.arguments?.getString("title") ?: ""
-        val description = backStackEntry.arguments?.getString("description") ?: ""
-        val author = backStackEntry.arguments?.getString("author") ?: ""
-        val published = backStackEntry.arguments?.getString("published") ?: ""
-        val imageUrl = backStackEntry.arguments?.getString("imageUrl") ?: ""
+        route = "photo_detail_screen",
 
-        PhotoDetail(
-            title = title,
-            description = description,
-            author = author,
-            published = published,
-            imageUrl = imageUrl
-        )
+    ) {
+        PhotoDetail()
     }
 }

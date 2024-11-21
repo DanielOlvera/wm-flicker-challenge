@@ -81,7 +81,7 @@ fun FlickerPhotoScreen(
                                     .size(128.dp)
                                     .clickable {
                                         navController.navigate(
-                                            "photo_detail_screen/${photo.title}/${photo.description}/${photo.author}/${photo.published}/${photo.media?.m}"
+                                            "photo_detail_screen"
                                         )
                                     }
                             )
