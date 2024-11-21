@@ -1,5 +1,6 @@
 package com.example.wmflickerchallenge.navigation
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -7,6 +8,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.example.wmflickerchallenge.model.data.Items
 import com.example.wmflickerchallenge.view.FlickerPhotoScreen
 import com.example.wmflickerchallenge.view.PhotoDetail
 import com.example.wmflickerchallenge.viewmodel.FlickerViewModel
@@ -21,7 +23,7 @@ fun ScreenNavigation(
         startDestination = "search_screen" // The starting screen in your app
     ) {
         searchScreen(navController, viewModel)
-        photoDetailScreen()
+        photoDetailScreen(navController)
     }
 }
 
@@ -35,11 +37,14 @@ fun NavGraphBuilder.searchScreen(
     }
 }
 
-fun NavGraphBuilder.photoDetailScreen() {
+fun NavGraphBuilder.photoDetailScreen(navController: NavHostController) {
     composable(
-        route = "photo_detail_screen",
-
+        route = "photo_detail_screen"
     ) {
-        PhotoDetail()
+
+        val item = navController.previousBackStackEntry?.savedStateHandle?.get<Items>("item")
+
+        Log.d("Dang", "photoDetailScreen: $item")
+        PhotoDetail(item)
     }
 }

@@ -1,8 +1,10 @@
 package com.example.wmflickerchallenge.model.data
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
 
-
+@Parcelize
 data class Items (
 
   @SerializedName("title"       ) var title       : String? = null,
@@ -15,4 +17,4 @@ data class Items (
   @SerializedName("author_id"   ) var authorId    : String? = null,
   @SerializedName("tags"        ) var tags        : String? = null
 
-)
+): Parcelable

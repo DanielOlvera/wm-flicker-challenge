@@ -80,6 +80,7 @@ fun FlickerPhotoScreen(
                                 modifier = Modifier
                                     .size(128.dp)
                                     .clickable {
+                                        navController.currentBackStackEntry?.savedStateHandle?.set("item", photo)
                                         navController.navigate(
                                             "photo_detail_screen"
                                         )
